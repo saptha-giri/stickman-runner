@@ -2,9 +2,8 @@ let data;
 
 let ground;
 let groundObject;
-let clouds = [];
-let cactusArray = [];
 let heroFrames = [];
+let heroJumpFrames = [];
 
 
 let cloudObjects = [];
@@ -27,20 +26,43 @@ function preload(){
 
     data = loadJSON("objects/data.json",()=>{
         for(let cloud of data.cloudsObj){
-            clouds.push(loadImage(cloud.path));
+
+            let image = cloud.path;
+            let posX = windowWidth -(windowWidth/round(random(2,5)));
+            let posY = windowHeight/cloud.posY;
+
+            let cWidth = windowWidth/cloud.width;
+            let cHeight = windowHeight/20;
+            let speed = cloud.speed;
+
+            cloudObjects.push(new Cloud(loadImage(image),posX,posY,cWidth,cHeight,speed));
         }
         
         for(let cact of data.cactus){
-            cactusArray.push(loadImage(cact.path));
+
+            let image = cact.path;
+
+            let posX = windowWidth;
+            let posY = windowHeight/2;
+
+            let cactusWidth = windowWidth/cact.width;
+            let cactusHeight = windowHeight/cact.height;
+
+            posY += cactusHeight;
+
+            cactusObjects.push(new Cactus(loadImage(image),posX,posY,cactusWidth,cactusHeight));
         }
 
         for(let sprite of data.stickman.fast){
-
             heroFrames.push(loadImage(sprite.path));
         }
+        
+        // for(let sprite of data.stickman.jump){
+        //     heroJumpFrames.push(loadImage(sprite.path));
+        // }
     });
 
-    ground = loadImage("assets/plain-ground.png");
+    // ground = loadImage("assets/plain-ground.png");
     bg = loadImage("assets/bg.png");
 
     gameFont = loadFont("lib/font/MunichRegular-Y8x4.ttf")
@@ -68,20 +90,9 @@ function preload(){
 
 function setup(){
     createCanvas(windowWidth,windowHeight);
-    groundObject = new Ground(ground);
+    // groundObject = new Ground(ground);
 
-    for(let index=0; index<clouds.length; index++){
-        let obj = data.cloudsObj[index];
-        let cloud = clouds[index];
-        cloudObjects.push(new Cloud(cloud,width-obj.posX,height/obj.posY,obj.width,obj.height,obj.speed));
-    }
-    
-    for(let index=0; index<cactusArray.length; index++){
-        let obj = data.cactus[index];
-        let cactu = cactusArray[index];
-        cactusObjects.push(new Cactus(cactu,windowWidth,height-obj.posY,obj.width,obj.height));
-    }
-    heroObject = new Hero(heroFrames,100,(height-570),0.6);
+    heroObject = new Hero(heroFrames,[],windowWidth/3,windowHeight/2,0.5);
     randomCheck = 0;
     cactusObj1 = cactusObjects[randomCheck];
     cactusObj2 = cactusObjects[2];
@@ -93,7 +104,7 @@ function setup(){
 function draw(){
     background('#FFFFFF');
 
-    // image(bg,0,0,windowWidth,windowHeight);
+    image(bg,0,0,windowWidth,windowHeight);
 
     menuState = getItem("menuState");
     gameState = getItem("gameState");
@@ -134,7 +145,7 @@ function loadMenu(){
 }
 
 function renderClouds(){
-    groundObject.render();
+    // groundObject.render();
     cloudObjects[0].render();
     cloudObjects[1].render();
     cloudObjects[2].render();
@@ -166,6 +177,14 @@ function loadGame(){
     }
     heroObject.render();
     heroObject.animate();
+
+    heroObject.runAnimation();
+
+    // if(!heroObject.isjumped){
+    //     heroObject.runAnimation();
+    // }else{
+    //     heroObject.jumpAnimation();
+    // }
 
     /* 
       GAME COLLISION DETECTION 
