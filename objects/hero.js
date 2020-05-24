@@ -38,6 +38,10 @@ class Hero{
 			this.y_velocity = 0;
             this.isjumped =  false;
         }
+
+        if(this.posX >= windowWidth/3){
+            this.posX = windowWidth/3;
+        }
             
     }
 
@@ -55,11 +59,12 @@ class Hero{
     animate(){
         this.aniIndex += this.speed;
         this.jumpAniIndex += this.speed;
+        this.posX += 6;
     }
 
     jump(){
 		if(!this.isjumped){
-			this.y_velocity -= 50;
+			this.y_velocity -= windowHeight/15;
             this.isjumped = true;
             
         }
