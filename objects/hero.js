@@ -5,8 +5,8 @@ class Hero{
         this.posX = posX;
         this.posY = posY;
 
-        this.width = windowWidth/20;
-        this.height = windowHeight/5;
+        this.width = windowWidth/15;
+        this.height = windowHeight/7;
 
         this.posY += this.height;
 
@@ -47,6 +47,8 @@ class Hero{
 
     runAnimation(){
         let index = floor(this.aniIndex) % this.animationLength;
+        // stroke(51);
+        // rect(this.posX,this.posY,this.width,this.height);
         image(this.frames[index],this.posX,this.posY,this.width,this.height);
     }
     

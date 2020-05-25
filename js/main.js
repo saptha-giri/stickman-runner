@@ -28,11 +28,11 @@ function preload(){
         for(let cloud of data.cloudsObj){
 
             let image = cloud.path;
-            let posX = windowWidth -(windowWidth/round(random(2,5)));
+            let posX = round(random(0,windowWidth));
             let posY = windowHeight/cloud.posY;
 
             let cWidth = windowWidth/cloud.width;
-            let cHeight = windowHeight/20;
+            let cHeight = windowHeight/10;
             let speed = cloud.speed;
 
             cloudObjects.push(new Cloud(loadImage(image),posX,posY,cWidth,cHeight,speed));
@@ -53,7 +53,8 @@ function preload(){
             cactusObjects.push(new Cactus(loadImage(image),posX,posY,cactusWidth,cactusHeight));
         }
 
-        for(let sprite of data.stickman.fast){
+        for(let sprite of data.stickman.run){
+            console.log(sprite.path)
             heroFrames.push(loadImage(sprite.path));
         }
         
@@ -62,10 +63,10 @@ function preload(){
         // }
     });
 
-    // ground = loadImage("assets/plain-ground.png");
-    bg = loadImage("assets/bg.png");
+    ground = loadImage("assets/ground.png");
+    bg = loadImage("assets/bg.jpg");
 
-    gameFont = loadFont("lib/font/MunichRegular-Y8x4.ttf")
+    gameFont = loadFont("lib/font/AVENGEANCE_MIGHTIEST_AVENGER.ttf")
 
     menuState = getItem("menuState");
 
@@ -90,7 +91,7 @@ function preload(){
 
 function setup(){
     createCanvas(windowWidth,windowHeight);
-    // groundObject = new Ground(ground);
+    groundObject = new Ground(ground,0,windowHeight-160,windowWidth,160);
 
     heroObject = new Hero(heroFrames,[],0,windowHeight/2,0.5);
     randomCheck = 0;
@@ -105,6 +106,7 @@ function draw(){
     background('#FFFFFF');
 
     image(bg,0,0,windowWidth,windowHeight);
+    groundObject.render();
 
     menuState = getItem("menuState");
     gameState = getItem("gameState");
@@ -189,60 +191,22 @@ function loadGame(){
     /* 
       GAME COLLISION DETECTION 
     */    
+    let heroBottom = heroObject.posY + heroObject.height;
+    let heroLeft = heroObject.posX;
+    let heroRight = heroObject.posX + heroObject.width;
+    let heroTop = heroObject.posY;
 
-    if((cactusObj1.posX+cactusObj1.width) <=(heroObject.posX+heroObject.width) && 
-        (heroObject.posY+heroObject.height)>=(cactusObj1.posY + cactusObj1.height)){
+    let cactusBottom = cactusObj1.posY + cactusObj1.height;
+    let cactusLeft = cactusObj1.posX;
+    let cactusRight = cactusObj1.posX + cactusObj1.width;
+    let cactusTop = cactusObj1.posY;
 
-        if(cactusObj1.posX+cactusObj1.width >= heroObject.posX){
-            noLoop();
-        }
+    if( heroTop > cactusBottom || heroRight < cactusLeft || heroBottom < cactusTop || heroLeft > cactusRight){
+        // noLoop();
+        console.log("no collision")
+    }else{
+        noLoop()
     }
-    if((cactusObj2.posX+cactusObj2.width) <=(heroObject.posX+heroObject.width) && 
-    (heroObject.posY+heroObject.height)>=(cactusObj2.posY + cactusObj2.height)){
-
-        if(cactusObj2.posX+cactusObj2.width >= heroObject.posX){
-            noLoop();
-        }
-        
-    }
-
-    let heroTopLeft = heroObject.posx;
-    let heroBottomRight = (heroObject.posX + heroObject.width + heroObject.height);
-
-    let cactusBottomRight = (cactusObj1.posX + cactusObj1.width +cactusObj1.height);
-    let cactusTopLeft = cactusObj1.posX;
-
-    // if (( heroTopLeft  <  cactusBottomRight )  &&  ( heroBottomRight   >  cactusTopLeft.x  )  &&
-    //     (heroTopLeft  <  cactusBottomRight  )  &&
-    //   (  heroBottomRight  >  cactusTopLeft.y  )  ){
-    //         console.log("no collision")
-    //     }else{
-    //         noLoop();
-    //     }
-
-    // console.log(cactusObj1.posY);
-    // console.log(heroObject.posY);
-
-    // if( heroObject.posY == cactusObj1.posY && heroBottomRight >= cactusBottomLeft){
-    //     noLoop();
-    // }
-    
-    // if((heroObject.posX + heroObject.width + heroObject.height) >= cactusObj1.posX){
-    //     console.log((heroObject.posX + heroObject.width + heroObject.height))
-    //     console.log(cactusObj1.posX)
-    //     noLoop();
-    // }
-    
-    // if(heroObject.posX == (cactusObj1.posX + cactusObj1.width)){
-    //     noLoop();
-    // }
-    
-    // if(heroObject.posX == (cactusObj1.posX + cactusObj1.width)){
-    //     noLoop();
-    // }
-
-
-
 }
 
 function renderScoreBoard(){

@@ -2,8 +2,8 @@
     "cloudsObj":[
         {
             "path":"assets/cloud1.png",
-            "width":2,
-            "height":5,
+            "width":3,
+            "height":3,
             "posX":500,
             "posY":3,
             "speed":2
@@ -36,19 +36,19 @@
     
     "cactus":[
         {
-            "path":"assets/cactus1.png",
-            "width":20,
-            "height":5
+            "path":"assets/OB1.png",
+            "width":10,
+            "height":7
         },
         {
-            "path":"assets/cactus2.png",
-            "width":25,
-            "height":5
+            "path":"assets/OB2.png",
+            "width":15,
+            "height":7
         },
         {
-            "path":"assets/cactus3.png",
-            "width":30,
-            "height":5
+            "path":"assets/OB3.png",
+            "width":12,
+            "height":7
         }
     ],
 
@@ -57,19 +57,23 @@
         "posY":100,
         "width":50,
         "height":100,
-        "fast":[
+        "run":[
             {
-                "path":"assets/fast/1.png"
+                "path":"assets/run/R1.png"
             },{
-                "path":"assets/fast/2.png"
+                "path":"assets/run/R2.png"
             },{
-                "path":"assets/fast/3.png"
+                "path":"assets/run/R3.png"
             },{
-                "path":"assets/fast/4.png"
+                "path":"assets/run/R4.png"
             },{
-                "path":"assets/fast/5.png"
+                "path":"assets/run/R5.png"
             },{
-                "path":"assets/fast/6.png"
+                "path":"assets/run/R6.png"
+            },{
+                "path":"assets/run/R7.png"
+            },{
+                "path":"assets/run/R8.png"
             }
         ]
     }
