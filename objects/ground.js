@@ -7,6 +7,8 @@ class Ground{
 
         this.width = width;
         this.height = height;
+
+        this.posY += this.height;
     }
 
     render(){

@@ -66,7 +66,8 @@ function preload(){
     ground = loadImage("assets/ground.png");
     bg = loadImage("assets/bg.jpg");
 
-    gameFont = loadFont("lib/font/AVENGEANCE_MIGHTIEST_AVENGER.ttf")
+    gameFont = loadFont("lib/font/AVENGEANCE_MIGHTIEST_AVENGER.ttf");
+    console.log("font")
 
     menuState = getItem("menuState");
 
@@ -91,7 +92,7 @@ function preload(){
 
 function setup(){
     createCanvas(windowWidth,windowHeight);
-    groundObject = new Ground(ground,0,windowHeight-160,windowWidth,160);
+    groundObject = new Ground(ground,0,windowHeight/2,windowWidth,windowHeight/4);
 
     heroObject = new Hero(heroFrames,[],0,windowHeight/2,0.5);
     randomCheck = 0;
@@ -126,7 +127,7 @@ function windowResized(){
 }
 
 function loadMenu(){
-    fill(0,100,200);
+    fill(200,200,200);
 
     textFont(gameFont,64);
     text("STICKMAN RUNNER",(width/2)-150,height/3); 
@@ -210,8 +211,9 @@ function loadGame(){
 }
 
 function renderScoreBoard(){
-    fill(0,100,200);
-    textSize(32);
+    fill(200,200,200);
+    // textSize(32);
+    textFont(gameFont,32);
     score = round(frameCount/24);
     highScore = getItem("highScore");
     text("HIGH: "+highScore+"\nSCORE: "+score,windowWidth-300,50);
