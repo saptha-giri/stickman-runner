@@ -1,7 +1,8 @@
 class Hero{
-    constructor(frames,jumpFrames,posX,posY,speed){
+    constructor(frames,jumpFrames,idleFrames,posX,posY,speed){
         this.frames = frames;
         this.jumpFrames = jumpFrames;
+        this.idleFrames = idleFrames;
         this.posX = posX;
         this.posY = posY;
 
@@ -19,8 +20,13 @@ class Hero{
         this.speed = speed;
         this.animationLength = this.frames.length;
         this.jumpLength = this.jumpFrames.length;
+        this.idleLength = this.idleFrames.length;
         this.aniIndex = 0;
         this.jumpAniIndex = 0;
+        this.idleAniIndex = 0;
+
+        this.isIdle = true;
+        this.stop = false;
     }
 
     render(){
@@ -55,20 +61,31 @@ class Hero{
     jumpAnimation(){
         let index = floor(this.jumpAniIndex) % this.jumpLength;
         image(this.jumpFrames[index],this.posX,this.posY,this.width,this.height);
-        console.log(this.jumpFrames[index])
+    }
+
+    idleAnimation(){
+        let index = floor(this.idleAniIndex) % this.idleLength;
+        image(this.idleFrames[index],this.posX,this.posY,this.width,this.height);
     }
 
     animate(){
-        this.aniIndex += this.speed;
-        this.jumpAniIndex += 1;
-        this.posX += 6;
+        if(!this.stop){
+            this.aniIndex += this.speed;
+            this.jumpAniIndex += 1;
+            this.idleAniIndex += 1;
+            this.posX += (this.isIdle)?0:6;
+        }
+    }
+
+    reset(){
+        this.stop = true;
+        this.posX = 0;
     }
 
     jump(){
 		if(!this.isjumped){
 			this.y_velocity -= windowHeight/15;
             this.isjumped = true;
-            
         }
     }
 }

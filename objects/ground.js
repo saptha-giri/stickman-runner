@@ -1,5 +1,5 @@
 class Ground{
-    constructor(image,posX,posY,width,height,speed){
+    constructor(image,posX,posY,width,height){
         this.image = image;
         this.speed = 10;
         this.posX = posX;
@@ -11,8 +11,13 @@ class Ground{
         this.posY += this.height;
     }
 
-    render(){
-        this.posX = (this.posX < -this.width)?0:this.posX -= this.speed;
+    render(isUpdate){
+        if(isUpdate){
+            this.posX = (this.posX < -this.width)?0:this.posX -= this.speed;
+        }else{
+            this.posX = 0;
+        }
+        
         image(this.image,this.posX,this.posY,this.width,this.height);
         image(this.image,this.posX+this.width,this.posY,this.width,this.height);
     }

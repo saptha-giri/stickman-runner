@@ -4,6 +4,7 @@ let ground;
 let groundObject;
 let heroFrames = [];
 let heroJumpFrames = [];
+let heroIdleFrames = [];
 
 
 let cloudObjects = [];
@@ -12,14 +13,14 @@ let heroObject;
 let cactusObj1,cactusObj2;
 
 let gameFont;
-let menuState = false;
-let gameState = false;
-
-let randomCheck;
+let menuState,gameState,gameOverState;
 let bg;
 
 let score = 0;
 let highScore = 0;
+
+let menuScene,gameScene,gameOverScene;
+let isGroundUpdate = false;
 
 
 function preload(){
@@ -61,6 +62,10 @@ function preload(){
         for(let sprite of data.stickman.jump){
             heroJumpFrames.push(loadImage(sprite.path));
         }
+        
+        for(let sprite of data.stickman.idle){
+            heroIdleFrames.push(loadImage(sprite.path));
+        }
     });
 
     ground = loadImage("assets/ground.png");
@@ -74,19 +79,20 @@ function preload(){
     if(menuState == null){
         menuState = true;
         storeItem("menuState",menuState);
+        storeItem("gameState",false);
+        storeItem("gameOverState",false);
     }
-    
-    gameState = getItem("gameState");
 
-    if(gameState == null){
-        gameState = true;
-        storeItem("gameState",gameState);
-    }
+    // if(gameState == null){
+    //     gameState = true;
+    //     storeItem("gameState",gameState);
+    // }
     
     highScore = getItem("highScore");
 
     if(highScore == null){
         storeItem("highScore",highScore);
+        storeItem("score",highScore);
     }
 }
 
@@ -94,11 +100,9 @@ function setup(){
     createCanvas(windowWidth,windowHeight);
     groundObject = new Ground(ground,0,windowHeight/2,windowWidth,windowHeight/4);
 
-    heroObject = new Hero(heroFrames,heroJumpFrames,0,windowHeight/2,0.5);
-    randomCheck = 0;
-    cactusObj1 = cactusObjects[randomCheck];
-    cactusObj2 = cactusObjects[2];
-    cactusObj2.posX = cactusObj1.posX+(windowWidth/2);
+    menuScene = new MenuScene();
+    gameScene = new GameScene(heroFrames,heroJumpFrames,heroIdleFrames,cactusObjects);
+    gameOverScene = new GameOverScene();
 
     frameRate(32)
 }
@@ -107,48 +111,42 @@ function draw(){
     background('#FFFFFF');
 
     image(bg,0,0,windowWidth,windowHeight);
-    groundObject.render();
+    groundObject.render(isGroundUpdate);
+    renderClouds();
 
     menuState = getItem("menuState");
     gameState = getItem("gameState");
-
-    renderClouds();
+    gameOverState = getItem("gameOverState");
 
     if(menuState){
-        loadMenu();
+        menuScene.render();
+        gameScene.heroObject.isIdle = true;
+        gameScene.heroObject.render();
+        gameScene.heroObject.animate();
+        gameScene.heroObject.idleAnimation();
     }else if(gameState){
-        loadGame();
-        renderScoreBoard();
-    }    
+        isGroundUpdate = true;
+        gameScene.heroObject.isIdle = false;
+        gameScene.render();
+
+        let isDead = gameScene.isCollisionOccured();
+        if(isDead){
+            // noLoop()
+            storeItem("menuState",false);
+            storeItem("gameState",false);
+            storeItem("gameOverState",true);
+            isGroundUpdate = false;
+        }
+    }else if(gameOverState){
+        gameOverScene.render();
+    }
 }
 
 function windowResized(){
     resizeCanvas(windowWidth,windowHeight);
 }
 
-function loadMenu(){
-    fill(200,200,200);
-
-    textFont(gameFont,64);
-    text("DINO RUN",(width/2)-150,height/3); 
-    textSize(32);
-    text("play",(width/2),height/2);
-
-    noFill();
-    rect((width/2)-40,(height/2)-45, 150, 55, 50);
-
-
-
-    if(mouseX>=(width/2)-40 && mouseX <= ((width/2)-40)+150 && mouseY >= (height/2)-45 && mouseY <= ((height/2)-45)+55){
-        cursor(HAND)
-    }else{
-        cursor(ARROW)
-    }
-    
-}
-
 function renderClouds(){
-    // groundObject.render();
     cloudObjects[0].render();
     cloudObjects[1].render();
     cloudObjects[2].render();
@@ -157,67 +155,15 @@ function renderClouds(){
 
 function mouseClicked() {
     
-    if(mouseX>=(width/2)-40 && mouseX <= ((width/2)-40)+150 && mouseY >= (height/2)-45 && mouseY <= ((height/2)-45)+55){
-        console.log("mouseX : "+mouseX)
-        console.log("mouseY : "+mouseY)
-
-        storeItem("menuState",false);
-        storeItem("gameState",true);
+    if(menuState){
+        menuScene.playButtonClick();
+    }else if(gameState){
+        let heroObject = gameScene.heroObject;
+        if(!heroObject.isjumped){
+            heroObject.jump();
+        }
+    }else if(gameOverState){
+        gameOverScene.retryButtonClick();
     }
-
-    if(!heroObject.isjumped){
-        heroObject.jump();
-    }
-}
-
-function loadGame(){
-    cactusObj1.render();
-    cactusObj2.render();
-
-    if(cactusObj1.posX < -(cactusObj1.width)){
-        randomCheck = round(random(cactusObjects.length-2));
-        cactusObj1 = cactusObjects[randomCheck];
-    }
-    heroObject.render();
-    heroObject.animate();
-
-    // heroObject.runAnimation();
-
-    if(!heroObject.isjumped){
-        heroObject.runAnimation();
-    }else{
-        heroObject.jumpAnimation();
-    }
-
-    /* 
-      GAME COLLISION DETECTION 
-    */    
-    let heroBottom = heroObject.posY + heroObject.height;
-    let heroLeft = heroObject.posX;
-    let heroRight = heroObject.posX + heroObject.width;
-    let heroTop = heroObject.posY;
-
-    let cactusBottom = cactusObj1.posY + cactusObj1.height;
-    let cactusLeft = cactusObj1.posX;
-    let cactusRight = cactusObj1.posX + cactusObj1.width;
-    let cactusTop = cactusObj1.posY;
-
-    if( heroTop > cactusBottom || heroRight < cactusLeft || heroBottom < cactusTop || heroLeft > cactusRight){
-        // noLoop();
-        console.log("no collision")
-    }else{
-        noLoop()
-    }
-}
-
-function renderScoreBoard(){
-    fill(200,200,200);
-    // textSize(32);
-    textFont(gameFont,32);
-    score = round(frameCount/24);
-    highScore = getItem("highScore");
-    text("HIGH: "+highScore+"\nSCORE: "+score,windowWidth-300,50);
-    if(score > highScore){
-        storeItem("highScore",score);
-    }
+    
 }

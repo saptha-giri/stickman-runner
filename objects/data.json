@@ -102,6 +102,29 @@
             },{
                 "path":"assets/jump/J12.png"
             }
+        ],
+        "idle":[
+            {
+                "path":"assets/idle/I1.png"
+            },{
+                "path":"assets/idle/I2.png"
+            },{
+                "path":"assets/idle/I3.png"
+            },{
+                "path":"assets/idle/I4.png"
+            },{
+                "path":"assets/idle/I5.png"
+            },{
+                "path":"assets/idle/I6.png"
+            },{
+                "path":"assets/idle/I7.png"
+            },{
+                "path":"assets/idle/I8.png"
+            },{
+                "path":"assets/idle/I9.png"
+            },{
+                "path":"assets/idle/I10.png"
+            }
         ]
     }
 }
