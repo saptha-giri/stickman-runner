@@ -75,6 +75,33 @@
             },{
                 "path":"assets/run/R8.png"
             }
+        ],
+        "jump":[
+            {
+                "path":"assets/jump/J1.png"
+            },{
+                "path":"assets/jump/J2.png"
+            },{
+                "path":"assets/jump/J3.png"
+            },{
+                "path":"assets/jump/J4.png"
+            },{
+                "path":"assets/jump/J5.png"
+            },{
+                "path":"assets/jump/J6.png"
+            },{
+                "path":"assets/jump/J7.png"
+            },{
+                "path":"assets/jump/J8.png"
+            },{
+                "path":"assets/jump/J9.png"
+            },{
+                "path":"assets/jump/J10.png"
+            },{
+                "path":"assets/jump/J11.png"
+            },{
+                "path":"assets/jump/J12.png"
+            }
         ]
     }
 }

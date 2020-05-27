@@ -60,7 +60,7 @@ class Hero{
 
     animate(){
         this.aniIndex += this.speed;
-        this.jumpAniIndex += this.speed;
+        this.jumpAniIndex += 1;
         this.posX += 6;
     }
 

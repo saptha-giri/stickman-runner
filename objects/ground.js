@@ -1,7 +1,7 @@
 class Ground{
     constructor(image,posX,posY,width,height,speed){
         this.image = image;
-        this.speed = 15;
+        this.speed = 10;
         this.posX = posX;
         this.posY = posY;
 

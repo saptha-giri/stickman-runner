@@ -58,9 +58,9 @@ function preload(){
             heroFrames.push(loadImage(sprite.path));
         }
         
-        // for(let sprite of data.stickman.jump){
-        //     heroJumpFrames.push(loadImage(sprite.path));
-        // }
+        for(let sprite of data.stickman.jump){
+            heroJumpFrames.push(loadImage(sprite.path));
+        }
     });
 
     ground = loadImage("assets/ground.png");
@@ -94,7 +94,7 @@ function setup(){
     createCanvas(windowWidth,windowHeight);
     groundObject = new Ground(ground,0,windowHeight/2,windowWidth,windowHeight/4);
 
-    heroObject = new Hero(heroFrames,[],0,windowHeight/2,0.5);
+    heroObject = new Hero(heroFrames,heroJumpFrames,0,windowHeight/2,0.5);
     randomCheck = 0;
     cactusObj1 = cactusObjects[randomCheck];
     cactusObj2 = cactusObjects[2];
@@ -130,7 +130,7 @@ function loadMenu(){
     fill(200,200,200);
 
     textFont(gameFont,64);
-    text("STICKMAN RUNNER",(width/2)-150,height/3); 
+    text("DINO RUN",(width/2)-150,height/3); 
     textSize(32);
     text("play",(width/2),height/2);
 
@@ -181,13 +181,13 @@ function loadGame(){
     heroObject.render();
     heroObject.animate();
 
-    heroObject.runAnimation();
+    // heroObject.runAnimation();
 
-    // if(!heroObject.isjumped){
-    //     heroObject.runAnimation();
-    // }else{
-    //     heroObject.jumpAnimation();
-    // }
+    if(!heroObject.isjumped){
+        heroObject.runAnimation();
+    }else{
+        heroObject.jumpAnimation();
+    }
 
     /* 
       GAME COLLISION DETECTION 
